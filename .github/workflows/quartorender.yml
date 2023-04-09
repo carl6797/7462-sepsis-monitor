@@ -14,7 +14,9 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Install Dependencies
-      run: Rscript -e 'install.packages(c("quarto", "tidyverse", "gt", "data.table", "googledrive", "kableExtra", "lubridate"))'
+      run:
+      Rscript -e 'install.packages(c("quarto", "tidyverse", "gt", "data.table", "googledrive", "kableExtra", "lubridate"), lib="mylibs")'
+
 
     - name: Render Document
       run: |
