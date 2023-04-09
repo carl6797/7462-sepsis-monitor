@@ -1,57 +1,22 @@
+name: Render R Quarto Document
 
-  schedule:
-    - cron:  '0 22 * * *'
+on:
   push:
-    branches: main
-  workflow_dispatch:
-
-name: Render Report
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
-  build-deploy:
+  render-document:
     runs-on: ubuntu-latest
-    
-    permissions:
-        contents: write
-        
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v3
+    - name: Checkout Repository
+      uses: actions/checkout@v2
 
-      - name: Set up Quarto
-        uses: quarto-dev/quarto-actions/setup@v2
+    - name: Install Dependencies
+      run: |
+        Rscript -e 'install.packages(c("quarto", "rmarkdown", "ggplot2", "tidyverse", "gt", "data.table", "googledrive", "kableExtra", "lubridate"))'
 
-      - name: Setup R
-        uses: r-lib/actions/setup-r@v2
-        with:
-          r-version: '4.3.0'
- 
-      - name: Install packages
-        uses: r-lib/actions/setup-r-dependencies@v2
-        with:
-            packages:
-               any::knitr
-               any::rmarkdown
-               any::jsonlite
-               any::dplyr
-               any::ggplot2
-               any::readr
-               any::lubridate
-               any::forcats
-
-      - name: Render document
-        uses: quarto-dev/quarto-actions/render@v2
-        with:
-          to: gfm
-          path: ICU Status Report.qmd
-
-      - name: Setup git config
-        run: |
-          git config user.name "GitHub Actions Bot"
-          git config user.email "<>"
-
-      - name: Commit
-        run: |
-          git add .
-          git commit -m "Updated report"
-          git push origin main
+    - name: Render Document
+      run: |
+        Rscript -e 'quarto::render("path/to/your/document.qmd")'
