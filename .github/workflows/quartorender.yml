@@ -13,9 +13,22 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v2
 
-
     - name: Install packages
-      run: Rscript -e c("quarto", "tidyverse", "gt", "data.table", "googledrive", "kableExtra", "lubridate")'
+      uses: r-lib/actions/setup-r-dependencies@v2
+      with:
+            packages:
+               any::knitr
+               any::rmarkdown
+               any::jsonlite
+               any::dplyr
+               any::tidyverse
+               any::readr
+               any::lubridate
+               any::forcats
+               any::googledrive
+               any::data.table
+               any::quarto
+               any::kableExtra
 
     - name: Render Document
       run: |
