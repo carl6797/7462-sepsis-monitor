@@ -13,18 +13,17 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v2
 
-      - name: Install packages
-        uses: r-lib/actions/setup-r-dependencies@v2
-        with:
-            packages:
-               any::knitr
-               any::rmarkdown
-               any::jsonlite
-               any::dplyr
-               any::ggplot2
-               any::readr
-               any::lubridate
-               any::forcats
+    - name: Install packages
+      uses: r-lib/actions/setup-r-dependencies@v2
+      with:
+        packages: |
+          quarto
+          tidyverse
+          gt
+          data.table
+          googledrive
+          kableExtra
+          lubridate
 
     - name: Render Document
       run: |
