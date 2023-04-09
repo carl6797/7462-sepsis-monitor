@@ -1,59 +1,19 @@
-on: [workflow_dispatch]
-
+name: Render Report
 on:
   schedule:
-    - cron:  '0 22 * * *'
-  push:
-    branches: main
-  workflow_dispatch:
-
-name: Render Report
-
+    - cron: '0 * * * *' # Run every hour
 jobs:
-  build-deploy:
+  render:
     runs-on: ubuntu-latest
-    
-    permissions:
-        contents: write
-        
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v3
-
-      - name: Set up Quarto
-        uses: quarto-dev/quarto-actions/setup@v2
-
-      - name: Setup R
-        uses: r-lib/actions/setup-r@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Install R and dependencies
+        uses: r-lib/actions/setup-r@v1
         with:
-          r-version: '4.3.0' # The R version to download (if necessary) and use.
- 
-      - name: Install packages
-        uses: r-lib/actions/setup-r-dependencies@v2
-        with:
-            packages:
-               any::knitr
-               any::rmarkdown
-               any::jsonlite
-               any::dplyr
-               any::ggplot2
-               any::readr
-               any::lubridate
-               any::forcats
-
-      - name: Render document
-        uses: quarto-dev/quarto-actions/render@v2
-        with:
-          to: gfm
-          path: README.qmd
-
-      - name: Setup git config
-        run: |
-          git config user.name "GitHub Actions Bot"
-          git config user.email "<>"
-
-      - name: Commit
-        run: |
-          git add .
-          git commit -m "Updated report"
-          git push origin main
+          r-version: '4.3.0' # Set the version of R to use
+          dependencies: |
+            remotes::install_github("rstudio/quarto") # Install Quarto package
+            remotes::install_github("rstudio/rmarkdown") # Install rmarkdown package
+      - name: Render report
+        run: Rscript -e 'rmarkdown::render("ICU Status Report.qmd", output_format = "quarto::quarto_html")'
