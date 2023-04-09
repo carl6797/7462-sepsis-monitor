@@ -44,7 +44,7 @@ jobs:
         uses: quarto-dev/quarto-actions/render@v2
         with:
           to: gfm
-          path: README.qmd
+          path: ICU Status Report.qmd
 
       - name: Setup git config
         run: |
