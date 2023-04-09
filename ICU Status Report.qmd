@@ -82,7 +82,7 @@ sepsis_only%>%
 ### Change in heart rate, temperature, and respiratory rate between the last two measurements for all patients
 
 ```{r echo=FALSE}
-library(gtExtras)
+library(gtExtras) 
 
 second_recent_data <- new_data %>%
   group_by(PatientID) %>%
