@@ -19,7 +19,7 @@ jobs:
         install.packages("knitr")
         install.packages("tinytex")
     - name: Render Report
-      run: Rscript -e 'rmarkdown::render("ICU Status Report.qmd", output_format = "html_document")'
+      run: Rscript -e 'rmarkdown::render(ICU Status Report.qmd, output_format = "html_document")'
     - name: Commit and Push Changes
       uses: stefanzweifel/git-auto-commit-action@v4
       with:
