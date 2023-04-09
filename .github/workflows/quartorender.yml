@@ -13,9 +13,6 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v2
 
-    - name: Clear package cache
-      run: pak::cache_clean()
-
     - name: Install packages
       run: Rscript -e 'pak::pkg_install(c("quarto", "tidyverse", "gt", "data.table", "googledrive", "kableExtra", "lubridate"))'
 
