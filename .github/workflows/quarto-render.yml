@@ -1,19 +1,4 @@
-name: Render report to HTML
 on:
   schedule:
     - cron: '0 * * * *'
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Set up R
-        uses: r-lib/actions/setup-r@v1
-      - name: Install dependencies
-        run: |
-          install.packages("rmarkdown")
-          install.packages("knitr")
-          install.packages("ggplot2")
-      - name: Render report
-        run: |
-          Rscript -e "rmarkdown::render('path/to/your/report.Rmd')"
+
