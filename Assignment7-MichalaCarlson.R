@@ -10,11 +10,11 @@ source("sepsis_monitor_functions.R")
 
 #### Task 2 ####
 tic()
-makeSepsisDataset(n = 100, read_fn = "fread")
+makeSepsisDataset(n = 50, read_fn = "fread")
 fread_time <- toc()
 
 tic()
-makeSepsisDataset(n = 100, read_fn = "read_delim")
+makeSepsisDataset(n = 5, read_fn = "read_delim")
 delim_time <- toc()
 
 
@@ -34,16 +34,17 @@ sepsis_file <- drive_put(media = "sepsis_data_temp.csv",
 # Set the file permissions so anyone can download this file.
 sepsis_file %>% drive_share_anyone()
 
-#### Task 4 ####
-
-##Getting Data
+#### Task 4
+######Getting Data
 drive_deauth()
-file_link <- "https://drive.google.com/drive/folders/1EAz9vFVlS0Qe4KKQZAuLRJ7LymgYAhwn"
-
+file_link <- "https://drive.google.com/file/d/1owDMR19aqusrPzebnBJfan6VdEkJpDVD"
 ## All data up until now
 new_data <- updateData(file_link)
-
 ## Include only most recent data
 most_recent_data <- new_data %>%
   group_by(PatientID) %>%
   filter(obsTime == max(obsTime))
+
+
+
+

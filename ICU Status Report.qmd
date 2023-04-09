@@ -27,6 +27,7 @@ library(data.table)
 library(lubridate)
 library(googledrive)
 library(kableExtra)
+library(pak)
 
 source("sepsis_monitor_functions.R")
 
