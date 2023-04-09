@@ -1,17 +1,17 @@
-name: Render Quarto Document
+name: Render Report
 
 on:
   push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+    branches: main
+  workflow_dispatch:
 
 jobs:
-  render_quarto:
+  build-deploy:
     runs-on: ubuntu-latest
-
+    
+    permissions:
+      contents: write
+        
     steps:
       - name: Check out repository
         uses: actions/checkout@v2
