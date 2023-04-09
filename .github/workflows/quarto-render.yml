@@ -16,10 +16,9 @@ jobs:
     - name: Install R packages
       run: |
         install.packages("rmarkdown")
-        install.packages("knitr")
-        install.packages("tinytex")
+        install.packages("quarto")
     - name: Render Report
-      run: Rscript -e 'rmarkdown::render(ICU Status Report.qmd, output_format = "html_document")'
+      run: Rscript -e 'rmarkdown::render("ICU Status Report.qmd", output_format = "quarto::quarto_html")'
     - name: Commit and Push Changes
       uses: stefanzweifel/git-auto-commit-action@v4
       with:
