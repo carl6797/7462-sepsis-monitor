@@ -1,0 +1,102 @@
+---
+title: "Sepsis Report"
+author: "Michala Carlson"
+format: html
+editor: visual
+---
+
+---
+title-block-banner: true
+title: ICU Status Report
+---
+
+```{r echo=FALSE}
+
+time <- paste("Report generated on ", format(Sys.time(), "%Y-%m-%d %H:%M:%S"))
+writeLines(time, "report.txt")
+
+time
+
+```
+
+```{r include=FALSE}
+
+library(gt)
+library(tidyverse)
+library(data.table)
+library(lubridate)
+library(googledrive)
+library(kableExtra)
+
+source("sepsis_monitor_functions.R")
+
+drive_deauth()
+file_link <- "https://drive.google.com/file/d/1owDMR19aqusrPzebnBJfan6VdEkJpDVD"
+## All data up until now
+new_data <- updateData(file_link)
+## Include only most recent data
+most_recent_data <- new_data %>%
+  group_by(PatientID) %>%
+  filter(obsTime == max(obsTime))
+
+```
+
+### Patients Currently with Sepsis
+
+```{r echo=FALSE}
+new_data_1 <- subset(most_recent_data, SepsisLabel == 1, select = c("PatientID","Temp", "Resp", "HR"))
+
+kable(new_data_1)
+
+```
+
+### Medical History of Patients with Sepsis
+
+```{r echo=FALSE}
+
+sepsis_only <- subset(new_data, SepsisLabel==1)
+
+sepsis_only%>%
+  ggplot(aes(y = HR, x=obsTime))+
+  geom_line()+
+  facet_wrap(~PatientID)+
+  ylab("Heart Rate")+
+  xlab("Time")
+
+sepsis_only%>%
+  ggplot(aes(y = Temp, x=obsTime))+
+  geom_line()+
+  facet_wrap(~PatientID)+
+  ylab("Temperature of Patient")+
+  xlab("Time")
+
+sepsis_only%>%
+  ggplot(aes(y = Resp, x=obsTime))+
+  geom_line()+
+  facet_wrap(~PatientID)+
+  ylab("Respiratory Rate of Patient")+
+  xlab("Time")
+
+```
+
+### Change in heart rate, temperature, and respiratory rate between the last two measurements for all patients
+
+```{r}
+library(gtExtras)
+
+second_recent_data <- new_data %>%
+  group_by(PatientID) %>%
+  filter(obsTime != max(obsTime))
+
+second_recent_data <- second_recent_data%>%
+  group_by(PatientID) %>%
+  filter(obsTime == max(obsTime))%>%
+  ungroup()
+
+second_recent_data$HRDiff <- most_recent_data$HR - second_recent_data$HR
+second_recent_data$TempDiff <- most_recent_data$Temp - second_recent_data$Temp
+second_recent_data$RespDiff <- most_recent_data$Resp - second_recent_data$Resp
+
+second_recent_data%>%subset(select = c("PatientID", "HRDiff", "TempDiff", "RespDiff"))%>%
+  gt()
+```
