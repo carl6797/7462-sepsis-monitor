@@ -15,7 +15,7 @@ jobs:
 
     - name: Install Dependencies
       run: |
-        Rscript -e 'install.packages(c("quarto", "rmarkdown", "ggplot2", "tidyverse", "gt", "data.table", "googledrive", "kableExtra", "lubridate"))'
+Rscript -e 'install.packages(c("quarto", "rmarkdown", "ggplot2", "tidyverse", "gt", "data.table", "googledrive", "kableExtra", "lubridate"), lib="~/R")'
 
     - name: Render Document
       run: |
