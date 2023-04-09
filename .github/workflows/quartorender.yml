@@ -13,17 +13,12 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v2
 
-    - name: Install packages
-      uses: r-lib/actions/setup-r-dependencies@v2
-      with:
-        packages: |
-          quarto
-          tidyverse
-          gt
-          data.table
-          googledrive
-          kableExtra
-          lubridate
+- name: Clear package cache
+  run: pak::cache_clean()
+
+- name: Install packages
+  run: Rscript -e 'pak::pkg_install(c("quarto", "tidyverse", "gt", "data.table", "googledrive", "kableExtra", "lubridate"))'
+
 
     - name: Render Document
       run: |
